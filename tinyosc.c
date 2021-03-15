@@ -178,12 +178,12 @@ static uint32_t tosc_vwrite(char *buffer, const int len,
   memset(buffer, 0, len); // clear the buffer
   uint32_t i = (uint32_t) strlen(address);
   if (address == NULL || i >= len) return -1;
-  tosc_strncpy(buffer, address, len);
+  tosc_strncpy(buffer, address, i+1);
   i = (i + 4) & ~0x3;
   buffer[i++] = ',';
   int s_len = (int) strlen(format);
   if (format == NULL || (i + s_len) >= len) return -2;
-  tosc_strncpy(buffer+i, format, len-i-s_len);
+  tosc_strncpy(buffer+i, format, s_len+1);
   i = (i + 4 + s_len) & ~0x3;
 
   for (int j = 0; format[j] != '\0'; ++j) {
@@ -237,7 +237,7 @@ static uint32_t tosc_vwrite(char *buffer, const int len,
         const char *str = (const char *) va_arg(ap, void *);
         s_len = (int) strlen(str);
         if (i + s_len >= len) return -3;
-        tosc_strncpy(buffer+i, str, len-i-s_len);
+        tosc_strncpy(buffer+i, str, s_len+1);
         i = (i + 4 + s_len) & ~0x3;
         break;
       }
